@@ -2,6 +2,12 @@ import pprint
 import requests
 import csv
 import pdb
+import datetime
+
+def time_elapsed(start_time):
+    now = datetime.datetime.now()
+    return now - start_time
+
 
 # FOR DEBUGGING
 pp = pprint.PrettyPrinter(indent=4)
@@ -38,6 +44,7 @@ with open(fileRead, 'r') as csvfile:
 
 # FROM INPUT CSV, QUERY ON EACH TERM THAT IS NOW IN readRows
 for idx, term in enumerate(readRows):
+    started_at = datetime.datetime.now()
     term = term[0]
     position = idx + 1
     print("###################################")
@@ -80,11 +87,16 @@ for idx, term in enumerate(readRows):
     # WRITE SELECTED INFO TO writeRows
     # THIS CAN BE EXPANDED JUST BE SURE TO ADD ANOTHER VALUE TO writeFields
     print("Adding Gene Info to Results Array, not yet writing to CSV")
+    print("Gene Info:")
+    print("Term: " + term)
+    print("Gene ID: " + gene_id)
+    print("Nomenclature Symbol: " + gene[gene_id]['nomenclaturesymbol'])
     writeRows.append([
         term,
         gene_id,
         gene[gene_id]['nomenclaturesymbol']
     ])
+    print("Time Elapsed: " + str(time_elapsed(started_at)))
     print("###################################")
     print("\n")
 
