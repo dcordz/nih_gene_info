@@ -7,7 +7,7 @@ import pdb
 pp = pprint.PrettyPrinter(indent=4)
 
 # INITIALIZE CSV FILE, FIELDS ARRAY, ROWS ARRAY
-fileWrite = "genes.csv"
+fileWrite = "output_genes.csv"
 
 # FILE TO READ, MUST BE IN SAME DIRECTORY AS THIS FILE
 fileRead = "CSVtest.csv"
