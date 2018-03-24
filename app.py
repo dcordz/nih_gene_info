@@ -37,7 +37,7 @@ with open(fileRead, 'r') as csvfile:
     print("Total no. of rows: %d"%(csvreader.line_num))
 
 # FROM INPUT CSV, QUERY ON EACH TERM THAT IS NOW IN readRows
-for term in readRows[:30]:
+for term in readRows:
     term = term[0]
 
     # QUERY TO GET ID FROM PROVIDED TERM, ex. term - ENSG00000099869
