@@ -37,10 +37,13 @@ with open(fileRead, 'r') as csvfile:
     print("Total no. of rows: %d"%(csvreader.line_num))
 
 # FROM INPUT CSV, QUERY ON EACH TERM THAT IS NOW IN readRows
-for term in readRows:
+for idx, term in enumerate(readRows):
     term = term[0]
-
+    position = idx + 1
+    print("###################################")
+    print("Gene Term " + term + ", number " + str(position) + " of " + str(len(readRows)))
     # QUERY TO GET ID FROM PROVIDED TERM, ex. term - ENSG00000099869
+    print("Getting Gene ID")
     gene_id_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi?retmode=json&db=gene&term=" + term
 
     # QUERY NIH API
@@ -49,6 +52,9 @@ for term in readRows:
 
     # IF TERM IS NOT FOUND, APPEND 'Not Found', GO TO NEXT TERM
     if rj['esearchresult']['count'] == '0':
+        print("Gene not found, going to next gene.")
+        print("###################################")
+        print("\n")
         writeRows.append([
             term,
             "ID Not Found",
@@ -60,6 +66,7 @@ for term in readRows:
     gene_id = rj['esearchresult']['idlist'][0]
 
     # QUERY FOR MORE INFO ABOUT GENE USING ID
+    print("Getting Gene Info")
     gene_info_url = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esummary.fcgi?retmode=json&db=gene&id=" + gene_id
 
     # QUERY NIH API
@@ -67,19 +74,25 @@ for term in readRows:
     gene = r2.json()['result']
 
     # PRINT OUTPUT TO STDOUT
-    pp = pprint.PrettyPrinter(indent=4)
-    pp.pprint(gene)
+    # pp = pprint.PrettyPrinter(indent=4)
+    # pp.pprint(gene)
 
     # WRITE SELECTED INFO TO writeRows
     # THIS CAN BE EXPANDED JUST BE SURE TO ADD ANOTHER VALUE TO writeFields
+    print("Adding Gene Info to Results Array, not yet writing to CSV")
     writeRows.append([
         term,
         gene_id,
         gene[gene_id]['nomenclaturesymbol']
     ])
+    print("###################################")
+    print("\n")
 
 # WRITE writeFields TO OUTPUT CSV FILE
 with open(fileWrite, 'w') as csvfile:
+    print("###################################")
+    print("WRITING RESULTS TO THE OUTPUT CSV")
+    print("###################################")
     # creating a csv writer object
     csvwriter = csv.writer(csvfile)
 
@@ -88,3 +101,7 @@ with open(fileWrite, 'w') as csvfile:
 
     # writing the data rows
     csvwriter.writerows(writeRows)
+
+print("###################################")
+print("FINISHED")
+print("###################################")
